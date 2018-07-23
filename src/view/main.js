@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
     BrowserRouter as Router,
     Route,
@@ -10,16 +10,18 @@ import {
     CSSTransition 
 } from "react-transition-group";
 
-import App from './view/App'
-import About from './view/About'
-import Inbox from './view/Inbox'
-import NoMatch from './NotFound'
+import Navigation from '../component/navigation'
+
+import App from '../view/App'
+import About from '../view/About'
+import Inbox from '../view/Inbox'
+import NoMatch from '../NotFound'
 
 
-const router = (
+const router = ( 
     <Router>
         <Route render={({ location }) => (
-            <div>
+            <Navigation>
                 <Route exact path="/" render={() => <Redirect to="/home" />} />
                 <TransitionGroup>
                     {/* no different than other usage of CSSTransition, just make sure to pass `location` to `Switch` so it can match the old location as it animates out */}
@@ -32,7 +34,7 @@ const router = (
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>
-            </div>
+            </Navigation>
             )} />
     </Router>
 )

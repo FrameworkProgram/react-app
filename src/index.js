@@ -1,12 +1,13 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './assets/index.css';
-import router from './router'
+import main from './view/main'
+
 
 import registerServiceWorker from './assets/registerServiceWorker';
 ReactDOM.render(
-    router,
+    main,
     document.getElementById('root')
 );
 registerServiceWorker();
