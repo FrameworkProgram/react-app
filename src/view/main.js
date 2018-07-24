@@ -10,7 +10,7 @@ import {
     CSSTransition 
 } from "react-transition-group";
 
-import Navigation from '../component/navigation'
+import Layout from '../component/Layout'
 
 import App from '../view/App'
 import About from '../view/About'
@@ -21,7 +21,7 @@ import NoMatch from '../NotFound'
 const router = ( 
     <Router>
         <Route render={({ location }) => (
-            <Navigation>
+            <Layout>
                 <Route exact path="/" render={() => <Redirect to="/home" />} />
                 <TransitionGroup>
                     {/* no different than other usage of CSSTransition, just make sure to pass `location` to `Switch` so it can match the old location as it animates out */}
@@ -34,7 +34,7 @@ const router = (
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>
-            </Navigation>
+            </Layout>
             )} />
     </Router>
 )
