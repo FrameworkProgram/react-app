@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import '../assets/App.css';
+import {home} from '../api/home'
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <div className="App">
         <p className="App-intro">
@@ -12,6 +13,12 @@ class App extends Component {
         </p>
       </div>
     );
+  }
+
+  componentWillMount () {
+    home().then(res => {
+      this.home = res.data
+    })
   }
 }
 
