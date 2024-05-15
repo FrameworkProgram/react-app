@@ -1,0 +1,83 @@
+// 声明流水线
+pipeline {
+    // 代理：流水线运行环境配置 可以配置 any｜none｜label|node|docker|dockerfile 
+    // any｜none 表示使用当前系统环境
+    // label|node 表示打个标记
+    // docker|dockerfile 表示使用docker
+    agent {
+        // docker环境配置
+        docker {
+            // docker使用镜像
+            image 'node:16'
+            // docker启动附带参数，非必选参数
+            args '-u root -p 3000:3000'
+            // 启动后运行脚本目录，非必选参数
+            customWorkspace: '/some/other/path'
+        }
+    }
+    // 执行中的环境变量定义，亦可写于执行阶段（stage）中
+    environment {
+        CROSS_ENV = 'test'
+    }
+    // 定义参数，在流水线执行步骤中通过 ‘params’ 对象使用
+    // 仅支持string｜booleanParam两种类型
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        booleanParam(name: 'DEBUG_BUILD', defaultValue: true, description: '')
+    }
+    // 流水线执行阶段列表
+    stages {
+        // 定义执行阶段 至少要有一个
+        stage('Build') {
+            // 执行步骤，必须包含一个或多个
+            steps {
+                sh 'npm i --unsafe-perm --registry=https://registry.npmmirror.com'
+                sh 'npm run build'
+                sh 'cd build/'
+                sh 'ls'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Hello ${params.PERSON}"
+            }
+        }
+        stage('Deploy') { 
+            // 执行条件
+            when {
+                // 当前分支为master
+                branch 'master'
+            }
+            steps {
+                echo 'upload to sever'
+            }
+        }
+    }
+    // 流水线或阶段的完成情况
+    post {
+        // 无论流水线或阶段的完成状态如何
+        always {
+            echo 'I will always'
+        }
+        // 当前流水线或阶段的完成状态与它之前的运行不同时
+        changed {
+            echo 'I will changed'
+        }
+        // 当前流水线或阶段的完成状态为"failure"
+        failure {
+            echo 'I will failure'
+        }
+        // 当前流水线或阶段的完成状态为"success"
+        success {
+            echo 'I will success'
+        }
+        // 当前流水线或阶段的完成状态为"unstable"
+        unstable {
+            echo 'I will unstable'
+        }
+        // 当前流水线或阶段的完成状态为"aborted"
+        aborted {
+            echo 'I will aborted'
+        }
+    }
+}
